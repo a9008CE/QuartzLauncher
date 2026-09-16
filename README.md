@@ -1,4 +1,4 @@
-# 星落 LaunCher (QuartzLauncher)
+# 星落 LaunCher (StarfallLauncher)
 
 面向 Minecraft 的轻量启动与管理工具：版本 / Java / Mod / 皮肤 / 资源，一个控制台搞定。
 
