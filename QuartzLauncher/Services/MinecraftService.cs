@@ -687,7 +687,7 @@ public class MinecraftService
         @"^\s*-XX:[+-]?(Use\w+GC|ZGenerational|UseCompactObjectHeaders|G1\w+Percent|G1\w+Size|(Max|Min)(GCPauseMillis|HeapFreeRatio))",
         RegexOptions.Compiled);
 
-    // 移植自 PCL2：按 Java 版本自动选择 ZGC / G1GC 并套用调优参数
+    // 按 Java 版本自动选择 ZGC / G1GC 并套用调优参数
     private static void ApplyGcArguments(List<string> jvmArgs, int javaMajor)
     {
         // 先移除版本 JSON 里自带的 GC 参数，避免冲突

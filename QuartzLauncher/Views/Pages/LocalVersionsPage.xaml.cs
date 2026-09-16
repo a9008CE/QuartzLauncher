@@ -306,7 +306,7 @@ public partial class LocalVersionsPage : Page, IStandaloneSidebarPage
 
     private static (string loader, string version) DetectLoaderFromJson(string json)
     {
-        // === PCL2 风格检测：在完整 JSON 字符串中搜索库名 ===
+        // === 在完整 JSON 字符串中搜索库名 ===
 
         // Fabric / Quilt: 搜索 "net.fabricmc:fabric-loader" 或 "org.quiltmc:quilt-loader"
         if (json.Contains("net.fabricmc:fabric-loader") || json.Contains("org.quiltmc:quilt-loader"))

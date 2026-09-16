@@ -10,7 +10,7 @@
 - **内容中心**：浏览 Mod、整合包、光影、材质包（Modrinth / CurseForge / MC百科），自动解析并补全前置依赖
 - **Java 管理**：自动检测本地 Java，一键下载 Temurin 运行环境（清华镜像加速）
 - **下载加速**：内置 BMCLAPI 等多源镜像，支持多线程分段下载、断点重试与文件校验缓存
-- **内存优化**：移植 PCL2 的启动前物理内存整理 + 按 Java 版本自动选择 ZGC / G1GC
+- **内存优化**：启动前整理物理内存 + 按 Java 版本自动选择 ZGC / G1GC
 - **主题系统**：6 种 UI 风格（极简 / 原版 / 毛玻璃 / 扁平 / 赛博朋克 / 流浪地球），深浅色切换，遮罩过渡动画
 - **皮肤**：本地皮肤库、Steve / Alex 模型切换、3D 外层渲染
 - **自动更新**：启动时自动检查新版本，后台下载并直接替换 exe
@@ -42,7 +42,6 @@ dotnet publish QuartzLauncher/QuartzLauncher.csproj -c Release -o dist
 
 ## 说明
 
-- 本仓库不包含第三方项目 `PCL-source`，相关源码版权归 PCL2 作者所有
 - `Launcher/` 与 `.minecraft/` 为运行时数据目录（含账号信息），已在 `.gitignore` 中排除
 - 官网（`website/`）不参与开源
 
@@ -55,8 +54,6 @@ dotnet publish QuartzLauncher/QuartzLauncher.csproj -c Release -o dist
 
 - 参考小部分内容：署名即可
 - 修改或重新实现实质功能（重度使用）：必须标明是第三方二次创作、名称以「星落 LaunCher」开头并加第三方后缀、公开源码、继续沿用本指南，且不得倒卖或付费解锁
-
-开源方式参考了 [Plain Craft Launcher 2](https://github.com/Meloong-Git/PCL)，特此致谢。
 
 ## 联系
 

@@ -5,7 +5,7 @@ using System.Security.Principal;
 namespace QuartzLauncher.Services;
 
 /// <summary>
-/// 移植自 PCL2 的「启动前内存优化」：整理物理内存占用，为游戏腾出更多可用内存。
+/// 启动前内存优化：整理物理内存占用，为游戏腾出更多可用内存。
 /// 1) 裁剪所有可访问进程的工作集（EmptyWorkingSet）
 /// 2) 清空系统备用内存列表（需管理员权限，非管理员时自动跳过）
 /// 注意：会显著延长启动耗时，仅在内存不足时建议开启。

@@ -10,9 +10,6 @@ Launcher/
 .minecraft/
 *.log
 
-# ===== 第三方源码（不属于本项目，不随仓库分发）=====
-PCL-source/
-
 # ===== 官网（不参与开源）=====
 website/
 
