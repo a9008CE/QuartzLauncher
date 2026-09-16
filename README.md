@@ -44,6 +44,10 @@ dotnet publish QuartzLauncher/QuartzLauncher.csproj -c Release -o dist
 - 本仓库不包含第三方项目 `PCL-source`，相关源码版权归 PCL2 作者所有
 - `Launcher/` 与 `.minecraft/` 为运行时数据目录（含账号信息），已在 `.gitignore` 中排除
 
+## 许可证
+
+本项目基于 [MIT License](LICENSE) 开源。
+
 ## 联系
 
 - QQ 群：1124014660（苏随安的小屋）
