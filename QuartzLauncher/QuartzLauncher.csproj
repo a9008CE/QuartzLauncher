@@ -15,6 +15,15 @@
     <FileVersion>1.0.1.0</FileVersion>
   </PropertyGroup>
 
+  <!--
+    私有功能覆盖：本地存在 Private/ 目录时启用完整功能（FULL_BUILD）。
+    Private/ 目录不随仓库分发，公开仓库构建的是精简版（对应文件为占位实现）。
+  -->
+  <PropertyGroup Condition="Exists('$(MSBuildProjectDirectory)/Private')">
+    <DefineConstants>$(DefineConstants);FULL_BUILD</DefineConstants>
+  </PropertyGroup>
+
+
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <DebugType>None</DebugType>
     <DebugSymbols>false</DebugSymbols>

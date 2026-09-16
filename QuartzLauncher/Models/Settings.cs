@@ -4,7 +4,12 @@ namespace QuartzLauncher.Models;
 
 public class Settings
 {
+#if FULL_BUILD
     public const string DefaultUpdateManifestUrl = "https://starfall-updater.tail309cd1.ts.net/update.json";
+#else
+    // 开源版不包含自动更新机制，更新服务端地址不予公开
+    public const string DefaultUpdateManifestUrl = "";
+#endif
 
     public string JavaPath { get; set; } = "";
     public List<JavaInfo> DetectedJavas { get; set; } = new();
