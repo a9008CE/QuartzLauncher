@@ -1,0 +1,141 @@
+<Page x:Class="QuartzLauncher.Views.Pages.AnimationSettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="Transparent">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="28,24" MaxWidth="680" HorizontalAlignment="Left">
+            <TextBlock Text="ANIMATION" Style="{DynamicResource PageEyebrow}"/>
+            <TextBlock Text="动画设置" Style="{DynamicResource PageTitle}"/>
+            <TextBlock Text="配置界面主题切换时的过渡方式。" Style="{DynamicResource PageSubtitle}"/>
+
+            <Border Style="{DynamicResource CardStyle}" Margin="0,18,0,0">
+                <StackPanel>
+                    <TextBlock Text="深浅色动画" Style="{DynamicResource SectionHeader}"/>
+                    <TextBlock Text="选择深色与浅色主题切换时的展开方向。" FontSize="12"
+                               Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,14"/>
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton x:Name="TopLeftRadio" Content="从左上到右下"
+                                     Style="{DynamicResource ToggleBtn}" GroupName="ThemeTransition"
+                                     Click="Transition_Click" Tag="topLeft" Margin="0,0,8,0"/>
+                        <RadioButton x:Name="TopRightRadio" Content="从右上到左下"
+                                     Style="{DynamicResource ToggleBtn}" GroupName="ThemeTransition"
+                                     Click="Transition_Click" Tag="topRight" Margin="0,0,8,0"/>
+                        <RadioButton x:Name="RippleRadio" Content="水点式"
+                                     Style="{DynamicResource ToggleBtn}" GroupName="ThemeTransition"
+                                     Click="Transition_Click" Tag="ripple" Margin="0,0,8,0"/>
+                        <RadioButton x:Name="FadeRadio" Content="直接渐变"
+                                     Style="{DynamicResource ToggleBtn}" GroupName="ThemeTransition"
+                                     Click="Transition_Click" Tag="fade" Margin="0,0,8,0"/>
+                        <RadioButton x:Name="NoneRadio" Content="无动画"
+                                     Style="{DynamicResource ToggleBtn}" GroupName="ThemeTransition"
+                                     Click="Transition_Click" Tag="none"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{DynamicResource CardStyle}" Margin="0,16,0,0">
+                <StackPanel>
+                    <TextBlock Text="动画样式" Style="{DynamicResource SectionHeader}" Margin="0,0,0,14"/>
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton x:Name="SlideRadio" Content="默认平移"
+                                     Style="{DynamicResource ToggleBtn}" GroupName="PageAnimation"
+                                     Click="PageAnimation_Click" Tag="slide" Margin="0,0,8,0"/>
+                        <RadioButton x:Name="QuickSlideRadio" Content="快速平移"
+                                     Style="{DynamicResource ToggleBtn}" GroupName="PageAnimation"
+                                     Click="PageAnimation_Click" Tag="quick" Margin="0,0,8,0"/>
+                        <RadioButton x:Name="ZoomRadio" Content="缩放"
+                                     Style="{DynamicResource ToggleBtn}" GroupName="PageAnimation"
+                                     Click="PageAnimation_Click" Tag="zoom" Margin="0,0,8,0"/>
+                        <RadioButton x:Name="DissolveRadio" Content="溶解"
+                                     Style="{DynamicResource ToggleBtn}" GroupName="PageAnimation"
+                                     Click="PageAnimation_Click" Tag="dissolve" Margin="0,0,8,0"/>
+                        <RadioButton x:Name="TearRadio" Content="撕纸"
+                                     Style="{DynamicResource ToggleBtn}" GroupName="PageAnimation"
+                                     Click="PageAnimation_Click" Tag="tear" Margin="0,0,8,0"/>
+                        <RadioButton x:Name="NoPageAnimationRadio" Content="无"
+                                     Style="{DynamicResource ToggleBtn}" GroupName="PageAnimation"
+                                     Click="PageAnimation_Click" Tag="none"/>
+                    </StackPanel>
+                    <StackPanel x:Name="TearSpeedPanel" Margin="0,16,0,0" Visibility="Collapsed">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="70"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="撕纸速度" FontSize="12"
+                                       Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center"
+                                       Margin="0,0,14,0"/>
+                            <Slider x:Name="TearSpeedSlider" Grid.Column="1" Minimum="350" Maximum="1540"
+                                    TickFrequency="50" IsSnapToTickEnabled="True"
+                                    IsDirectionReversed="True"
+                                    ValueChanged="TearSpeed_Changed" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="TearSpeedText" Grid.Column="2" Text="760 ms" FontSize="12"
+                                       Foreground="{DynamicResource TextMutedBrush}" TextAlignment="Right"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+                        <Grid Margin="0,14,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="70"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="尖角锐度" FontSize="12"
+                                       Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center"
+                                       Margin="0,0,14,0"/>
+                            <Slider x:Name="TearApexSlider" Grid.Column="1" Minimum="10" Maximum="90"
+                                    TickFrequency="5" IsSnapToTickEnabled="True"
+                                    ValueChanged="TearApex_Changed" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="TearApexText" Grid.Column="2" Text="50%" FontSize="12"
+                                       Foreground="{DynamicResource TextMutedBrush}" TextAlignment="Right"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+                        <Grid Margin="0,14,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox x:Name="TearRandomDirectionCheck" Grid.Column="0" Content="随机方向"
+                                      VerticalAlignment="Center" Margin="0,0,18,0"
+                                      Checked="TearRandomDirection_Changed"
+                                      Unchecked="TearRandomDirection_Changed"/>
+                            <StackPanel x:Name="TearFixedDirectionPanel" Grid.Column="1" Orientation="Horizontal">
+                                <RadioButton x:Name="TearVerticalRadio" Content="左右撕开"
+                                             Style="{DynamicResource ToggleBtn}" GroupName="TearDirection"
+                                             Click="TearDirection_Click" Tag="vertical" Margin="0,0,8,0"/>
+                                <RadioButton x:Name="TearHorizontalRadio" Content="上下撕开"
+                                             Style="{DynamicResource ToggleBtn}" GroupName="TearDirection"
+                                             Click="TearDirection_Click" Tag="horizontal"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{DynamicResource CardStyle}" Margin="0,16,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="高级动效" Style="{DynamicResource SectionHeader}" Margin="0,0,0,4"/>
+                        <TextBlock Text="启用星轨流光：动态切片、景深缩放与流光扫掠组合转场。"
+                                   FontSize="12" Foreground="{DynamicResource TextMutedBrush}"
+                                   TextWrapping="Wrap" MaxWidth="440"/>
+                        <TextBlock Text="注：星轨流光仅能运用于“默认平移”，否则动画会出现异常。"
+                                   FontSize="11" Foreground="{DynamicResource TextMutedBrush}"
+                                   TextWrapping="Wrap" Margin="0,6,0,0" MaxWidth="440"/>
+                        <TextBlock x:Name="CinematicStatusText" FontSize="11"
+                                   Foreground="{DynamicResource PrimaryBrush}"
+                                   Margin="0,8,0,0"/>
+                    </StackPanel>
+                    <Button x:Name="CinematicButton" Grid.Column="1"
+                            Content="启用星轨流光" Style="{DynamicResource BtnPrimary}"
+                            Padding="14,8" Margin="20,0,0,0"
+                            VerticalAlignment="Center" Click="Cinematic_Click"/>
+                </Grid>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

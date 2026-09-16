@@ -1,0 +1,214 @@
+<Page x:Class="QuartzLauncher.Views.Pages.ModDownloadSettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="Transparent">
+    <Grid Margin="24,20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="280"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- 左侧：设置卡片 -->
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Padding="0,0,20,0">
+            <StackPanel>
+                <TextBlock Text="资源中心设置" FontSize="18" FontWeight="SemiBold"
+                           Foreground="{DynamicResource TextBrush}" Margin="0,0,0,6"/>
+                <TextBlock Text="配置 Mod 下载源和相关选项。" FontSize="12"
+                           Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,20"/>
+
+                <!-- 下载源 -->
+                <Border x:Name="CardSource" Style="{DynamicResource CardStyle}" Padding="16" Margin="0,0,0,12"
+                        MouseEnter="Card_MouseEnter" MouseLeave="Card_MouseLeave" Tag="Source">
+                    <StackPanel>
+                        <TextBlock Text="下载源" Style="{DynamicResource SectionHeader}" Margin="0,0,0,10"/>
+                        <TextBlock Text="选择搜索和下载 Mod 时使用的平台。" FontSize="11"
+                                   Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,12"/>
+                        <ComboBox x:Name="SourceCombo" Width="200" HorizontalAlignment="Left"
+                                  SelectionChanged="SourceCombo_SelectionChanged"/>
+
+                        <Border x:Name="CustomPanel" Visibility="Collapsed" Margin="0,16,0,0"
+                                Background="{DynamicResource InputBgBrush}" CornerRadius="12"
+                                Padding="16" BorderBrush="{DynamicResource BorderBrush}"
+                                BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="自定义混合检索源" FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource TextBrush}" Margin="0,0,0,4"/>
+                                <TextBlock Text="勾选需要同时检索的平台。" FontSize="11"
+                                           Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,12"/>
+
+                                <CheckBox x:Name="ChkAll" Content="全部（同时搜索所有源）"
+                                          Margin="0,0,0,8" Foreground="{DynamicResource TextBrush}"
+                                          Checked="ChkAny_Changed" Unchecked="ChkAny_Changed"/>
+                                <CheckBox x:Name="ChkModrinth" Content="Modrinth"
+                                          Margin="16,0,0,8" Foreground="{DynamicResource TextBrush}"
+                                          Checked="ChkAny_Changed" Unchecked="ChkAny_Changed"/>
+                                <CheckBox x:Name="ChkCurseForge" Content="CurseForge"
+                                          Margin="16,0,0,8" Foreground="{DynamicResource TextBrush}"
+                                          Checked="ChkAny_Changed" Unchecked="ChkAny_Changed"/>
+                                <CheckBox x:Name="ChkMcmod" Content="MC百科"
+                                          Margin="16,0,0,8" Foreground="{DynamicResource TextBrush}"
+                                          Checked="ChkAny_Changed" Unchecked="ChkAny_Changed"/>
+
+                                <TextBlock x:Name="CustomSummary" FontSize="11"
+                                           Foreground="{DynamicResource TextMutedBrush}" Margin="0,8,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- CurseForge API Key -->
+                <Border x:Name="CardApiKey" Style="{DynamicResource CardStyle}" Padding="16" Margin="0,0,0,12"
+                        MouseEnter="Card_MouseEnter" MouseLeave="Card_MouseLeave" Tag="ApiKey">
+                    <StackPanel>
+                        <TextBlock Text="CurseForge API Key" Style="{DynamicResource SectionHeader}" Margin="0,0,0,10"/>
+                        <TextBlock Text="可选：留空使用公开兼容源，填写后优先使用官方 API。" FontSize="11"
+                                   Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,12"/>
+                        <TextBox x:Name="ApiKeyBox" Width="360" HorizontalAlignment="Left"
+                                 Padding="8,6" FontSize="12" MaxLength="200"
+                                 LostFocus="ApiKeyBox_LostFocus"
+                                 Foreground="{DynamicResource TextBrush}"
+                                 Background="{DynamicResource InputBgBrush}"
+                                 BorderBrush="{DynamicResource BorderBrush}"/>
+                        <TextBlock x:Name="ApiKeyHint" FontSize="10" Margin="0,6,0,0"
+                                   Foreground="{DynamicResource TextMutedBrush}"
+                                     Text="无需填写即可搜索和下载；Key 仅用于优先访问官方 API。"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- 下载目录 -->
+                <Border x:Name="CardPath" Style="{DynamicResource CardStyle}" Padding="16" Margin="0,0,0,12"
+                        MouseEnter="Card_MouseEnter" MouseLeave="Card_MouseLeave" Tag="Path">
+                    <StackPanel>
+                        <TextBlock Text="下载目录" Style="{DynamicResource SectionHeader}" Margin="0,0,0,10"/>
+                        <TextBlock Text="Mod 下载存放位置。默认使用当前实例的 mods 目录。" FontSize="11"
+                                   Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,12"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="DownloadPathBox" Grid.Column="0"
+                                     Padding="8,6" FontSize="12" IsReadOnly="True"
+                                     Foreground="{DynamicResource TextBrush}"
+                                     Background="{DynamicResource InputBgBrush}"
+                                     BorderBrush="{DynamicResource BorderBrush}"
+                                     VerticalContentAlignment="Center"/>
+                            <Button Grid.Column="1" Content="选择..." Margin="8,0,0,0" Padding="12,6"
+                                    Cursor="Hand" Click="BrowseDownloadPath_Click"
+                                    Foreground="{DynamicResource TextBrush}"
+                                    Background="{DynamicResource PrimaryBrush}"
+                                    VerticalAlignment="Center"/>
+                            <Button Grid.Column="2" Content="重置" Margin="4,0,0,0" Padding="12,6"
+                                    Cursor="Hand" Click="ResetDownloadPath_Click"
+                                    Foreground="{DynamicResource TextMutedBrush}"
+                                    Background="{DynamicResource InputBgBrush}"
+                                    VerticalAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- 下载并发 -->
+                <Border x:Name="CardConcurrent" Style="{DynamicResource CardStyle}" Padding="16" Margin="0,0,0,12"
+                        MouseEnter="Card_MouseEnter" MouseLeave="Card_MouseLeave" Tag="Concurrent">
+                    <StackPanel>
+                        <TextBlock Text="下载并发" Style="{DynamicResource SectionHeader}" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="同时下载任务数" FontSize="12" Margin="0,0,0,6"
+                                   Foreground="{DynamicResource TextBrush}"/>
+                        <TextBlock Text="同时下载多少个文件，过高可能导致限速。" FontSize="11"
+                                   Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,8"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <Slider x:Name="ConcurrentSlider" Width="260" Minimum="1" Maximum="16"
+                                    TickFrequency="1" IsSnapToTickEnabled="True"
+                                    ValueChanged="ConcurrentSlider_ValueChanged"/>
+                            <TextBlock x:Name="ConcurrentLabel" Width="36" Text="4"
+                                       VerticalAlignment="Center" TextAlignment="Center"
+                                       FontSize="13" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource TextBrush}"/>
+                        </StackPanel>
+
+                        <Border Height="1" Background="{DynamicResource BorderBrush}" Margin="0,4,0,16"/>
+
+                        <TextBlock Text="下载线程数" FontSize="12" Margin="0,0,0,6"
+                                   Foreground="{DynamicResource TextBrush}"/>
+                        <TextBlock Text="每个下载任务使用的线程数，自动模式根据网速调整。" FontSize="11"
+                                   Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,8"/>
+                        <CheckBox x:Name="AutoThreadChk" Content="自动（推荐）"
+                                  Margin="0,0,0,8" Foreground="{DynamicResource TextBrush}"
+                                  Checked="AutoThread_Changed" Unchecked="AutoThread_Changed"/>
+                        <StackPanel x:Name="ManualThreadPanel" Orientation="Horizontal"
+                                    IsEnabled="False" Margin="16,0,0,0">
+                            <Slider x:Name="ThreadSlider" Width="260" Minimum="1" Maximum="16"
+                                    TickFrequency="1" IsSnapToTickEnabled="True"
+                                    ValueChanged="ThreadSlider_ValueChanged"/>
+                            <TextBlock x:Name="ThreadLabel" Width="36" Text="3"
+                                       VerticalAlignment="Center" TextAlignment="Center"
+                                       FontSize="13" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource TextBrush}"/>
+                        </StackPanel>
+
+                        <Border Height="1" Background="{DynamicResource BorderBrush}" Margin="0,16,0,16"/>
+
+                        <TextBlock Text="下载失败重试" FontSize="12" Margin="0,0,0,6"
+                                   Foreground="{DynamicResource TextBrush}"/>
+                        <TextBlock Text="单个文件下载失败后自动重试的次数。" FontSize="11"
+                                   Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,8"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Slider x:Name="RetrySlider" Width="260" Minimum="0" Maximum="10"
+                                    TickFrequency="1" IsSnapToTickEnabled="True"
+                                    ValueChanged="RetrySlider_ValueChanged"/>
+                            <TextBlock x:Name="RetryLabel" Width="36" Text="3"
+                                       VerticalAlignment="Center" TextAlignment="Center"
+                                       FontSize="13" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource TextBrush}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- 加载器 -->
+                <Border x:Name="CardLoader" Style="{DynamicResource CardStyle}" Padding="16" Margin="0,0,0,12"
+                        MouseEnter="Card_MouseEnter" MouseLeave="Card_MouseLeave" Tag="Loader">
+                    <StackPanel>
+                        <TextBlock Text="加载器" Style="{DynamicResource SectionHeader}" Margin="0,0,0,10"/>
+                        <TextBlock Text="Fabric / Forge / Quilt 等加载器的安装选项。" FontSize="11"
+                                   Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,12"/>
+                        <CheckBox x:Name="AutoInstallChk" Content="自动安装匹配的加载器版本"
+                                  Foreground="{DynamicResource TextBrush}"
+                                  Checked="AutoInstall_Changed" Unchecked="AutoInstall_Changed"/>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- 右侧：帮助卡片 -->
+        <Border Grid.Column="1" Style="{DynamicResource CardStyle}" Padding="20"
+                VerticalAlignment="Top" Margin="0,80,0,0">
+            <StackPanel>
+                <TextBlock Text="功能说明" FontSize="14" FontWeight="SemiBold"
+                           Foreground="{DynamicResource TextBrush}" Margin="0,0,0,6"/>
+                <TextBlock Text="鼠标悬停左侧卡片查看详细说明" FontSize="11"
+                           Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,16"/>
+
+                <Border Height="1" Background="{DynamicResource BorderBrush}" Margin="0,0,0,16"/>
+
+                <TextBlock x:Name="HelpTitle" Text="下载源" FontSize="13" FontWeight="SemiBold"
+                           Foreground="{DynamicResource PrimaryBrush}" Margin="0,0,0,8"/>
+                <TextBlock x:Name="HelpDesc" TextWrapping="Wrap" FontSize="12" LineHeight="20"
+                           Foreground="{DynamicResource TextBrush}"
+                           Text="选择 Mod 搜索和下载时使用的平台。支持 Modrinth、CurseForge、MC百科三个源，也可以混合多个源同时搜索。"/>
+
+                <Border Height="1" Background="{DynamicResource BorderBrush}" Margin="16,16"/>
+
+                <StackPanel Margin="0,16,0,0">
+                    <TextBlock Text="快捷提示" FontSize="13" FontWeight="SemiBold"
+                               Foreground="{DynamicResource PrimaryBrush}" Margin="0,0,0,8"/>
+                    <TextBlock TextWrapping="Wrap" FontSize="11" LineHeight="18"
+                               Foreground="{DynamicResource TextMutedBrush}"
+                                Text="&#x2022; 混合模式可自由组合多个源&#x0a;&#x2022; CurseForge 无 Key 也可使用公开兼容源&#x0a;&#x2022; 下载线程建议保持自动&#x0a;&#x2022; 重试次数 3 次通常足够"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

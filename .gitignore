@@ -1,0 +1,21 @@
+# ===== 构建输出 =====
+[Bb]in/
+[Oo]bj/
+dist/
+*.user
+*.suo
+
+# ===== 运行时数据（含账号 / 密钥，切勿提交）=====
+Launcher/
+.minecraft/
+*.log
+
+# ===== 第三方源码（不属于本项目，不随仓库分发）=====
+PCL-source/
+
+# ===== IDE / 系统 =====
+.vs/
+.idea/
+Thumbs.db
+Desktop.ini
+.DS_Store

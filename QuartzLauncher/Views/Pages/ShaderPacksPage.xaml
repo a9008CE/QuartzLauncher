@@ -1,0 +1,38 @@
+<Page x:Class="QuartzLauncher.Views.Pages.ShaderPacksPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="Transparent"
+      AllowDrop="True" Drop="Page_Drop" DragOver="Page_DragOver">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="36,24">
+            <TextBlock Text="SHADER PACKS" Style="{DynamicResource PageEyebrow}"/>
+            <TextBlock Text="光影包管理" Style="{DynamicResource PageTitle}"/>
+            <TextBlock Text="管理光影着色器包，双击启用或禁用。" Style="{DynamicResource PageSubtitle}"/>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="320"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{DynamicResource CardStyle}">
+                    <DockPanel>
+                        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                            <TextBlock Text="光影包列表" Style="{DynamicResource SectionHeader}" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Content="导入" Style="{DynamicResource BtnBase}" Padding="10,5"
+                                        Click="Import_Click" Margin="0,0,6,0"/>
+                                <Button Content="刷新" Style="{DynamicResource BtnBase}" Padding="10,5"
+                                        Click="Refresh_Click"/>
+                            </StackPanel>
+                        </DockPanel>
+                        <TextBlock x:Name="HintText" DockPanel.Dock="Top" FontSize="12"
+                                   Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,12"
+                                   Text="拖拽光影包文件到此窗口即可导入"/>
+                        <ListBox x:Name="PackList" BorderThickness="0"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

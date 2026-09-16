@@ -1,0 +1,168 @@
+<Page x:Class="QuartzLauncher.Views.Pages.InstanceDetailPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="Transparent">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="28,24" MaxWidth="720">
+            <TextBlock Text="INSTANCE" Style="{DynamicResource PageEyebrow}"/>
+            <TextBlock x:Name="InstanceTitle" Text="实例详情" Style="{DynamicResource PageTitle}"/>
+            <TextBlock x:Name="InstanceSubtitle" Style="{DynamicResource PageSubtitle}"/>
+
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Column="0" Grid.Row="0" Style="{DynamicResource CardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="基本信息" Style="{DynamicResource SectionHeader}"/>
+                        <Grid Height="98" Margin="0,0,0,12">
+                            <Image x:Name="InstanceIcon" Width="64" Height="64"
+                                   HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="UniformToFill"/>
+                            <StackPanel Margin="78,2,0,0">
+                                <TextBlock Text="版本图标" FontSize="12"
+                                           Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,8"/>
+                                <ComboBox x:Name="IconCombo" Height="36" VerticalContentAlignment="Center"
+                                          SelectedValuePath="Key" SelectionChanged="IconCombo_SelectionChanged">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="{Binding Icon}" Width="24" Height="24"
+                                                       Stretch="UniformToFill" Margin="0,0,8,0"/>
+                                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
+                        <TextBlock x:Name="InfoMinecraft" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,6"/>
+                        <TextBlock x:Name="InfoLoader" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,6"/>
+                        <TextBlock x:Name="InfoCreated" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,6"/>
+                        <TextBlock x:Name="InfoDir" FontSize="11" Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap" Opacity="0.7"/>
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Content="当前版本重命名" Style="{DynamicResource BtnBase}"
+                                    Height="34" Click="Rename_Click"/>
+                            <Button Grid.Column="2" Content="打开路径" Style="{DynamicResource BtnBase}"
+                                    Height="34" Click="OpenPath_Click"/>
+                        </Grid>
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Content="从列表移除" Style="{DynamicResource BtnBase}" Height="34"
+                                    Padding="8,4" Click="RemoveFromList_Click" ToolTip="仅从启动器列表移除，不删除游戏文件"/>
+                            <Button Grid.Column="2" Content="删除版本" Style="{DynamicResource BtnDanger}" Height="34"
+                                    Padding="8,4" Click="DeleteVersion_Click"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2" Grid.Row="0" Style="{DynamicResource CardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="数据统计" Style="{DynamicResource SectionHeader}"/>
+                        <TextBlock x:Name="StatMods" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,6"/>
+                        <TextBlock x:Name="StatResourcePacks" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,6"/>
+                        <TextBlock x:Name="StatShaderPacks" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,6"/>
+                        <TextBlock x:Name="StatCrashes" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,6"/>
+                        <TextBlock x:Name="StatSaves" FontSize="12" Foreground="{DynamicResource TextMutedBrush}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Border Style="{DynamicResource CardStyle}">
+                <StackPanel>
+                    <TextBlock Text="版本隔离" Style="{DynamicResource SectionHeader}" Margin="0,0,0,10"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="当前版本:" FontSize="12"
+                                   Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"
+                                   Margin="0,0,14,0"/>
+                        <ComboBox x:Name="VersionIsolationCombo" Grid.Column="1" Height="34"
+                                  VerticalContentAlignment="Center" SelectionChanged="VersionIsolation_Changed">
+                            <ComboBoxItem Content="使用独立版本目录" Tag="version"/>
+                            <ComboBoxItem Content="使用旧实例目录（兼容）" Tag="legacy"/>
+                            <ComboBoxItem Content="不隔离（共用 .minecraft）" Tag="shared"/>
+                        </ComboBox>
+                    </Grid>
+                    <TextBlock x:Name="VersionIsolationStatus" FontSize="11"
+                               Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap"
+                               Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{DynamicResource CardStyle}" Margin="0,16,0,0">
+                <StackPanel>
+                    <TextBlock Text="语言设置" Style="{DynamicResource SectionHeader}" Margin="0,0,0,10"/>
+                    <Button x:Name="ChineseSettingButton" Content="启动时是否自动设为中文" Style="{DynamicResource BtnBase}"
+                            Height="38" Click="ToggleChinese_Click"/>
+                    <TextBlock x:Name="ChineseSettingStatus" FontSize="11"
+                               Foreground="{DynamicResource TextMutedBrush}" Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{DynamicResource CardStyle}" Margin="0,16,0,0">
+                <StackPanel>
+                    <TextBlock Text="实例启动参数" Style="{DynamicResource SectionHeader}" Margin="0,0,0,10"/>
+                    <TextBlock Text="Java（可为当前版本单独指定，留空按全局模式选择）" FontSize="12"
+                               Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,4"/>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox x:Name="InstanceJavaSelector" Grid.Row="0" Grid.Column="0" Height="32"
+                                  VerticalContentAlignment="Center"
+                                  SelectionChanged="InstanceJavaSelector_SelectionChanged"/>
+                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="8,0,0,0">
+                            <Button Content="刷新" Style="{DynamicResource BtnBase}"
+                                    Padding="10,4" Click="RefreshJava_Click"/>
+                            <Button Content="浏览" Style="{DynamicResource BtnBase}"
+                                    Padding="12,4" Margin="8,0,0,0" Click="BrowseJava_Click"/>
+                        </StackPanel>
+                        <TextBox x:Name="JavaPathBox" Grid.Row="1" Grid.Column="0" Height="28" Margin="0,6,0,0"
+                                 VerticalContentAlignment="Center" IsReadOnly="True" FontSize="11"/>
+                    </Grid>
+                    <TextBlock x:Name="JavaSelectionStatus" FontSize="11"
+                               Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap"
+                               Margin="0,6,0,0"/>
+                    <TextBlock Text="内存 MB（留空使用全局设置）" FontSize="12"
+                               Foreground="{DynamicResource TextMutedBrush}" Margin="0,12,0,4"/>
+                    <TextBox x:Name="MemoryBox" Height="32" VerticalContentAlignment="Center"/>
+                    <TextBlock Text="JVM 参数（每行一个参数）" FontSize="12"
+                               Foreground="{DynamicResource TextMutedBrush}" Margin="0,12,0,4"/>
+                    <TextBox x:Name="JvmArgumentsBox" MinHeight="64" AcceptsReturn="True"
+                             TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+                    <TextBlock Text="游戏参数（每行一个参数）" FontSize="12"
+                               Foreground="{DynamicResource TextMutedBrush}" Margin="0,12,0,4"/>
+                    <TextBox x:Name="GameArgumentsBox" MinHeight="64" AcceptsReturn="True"
+                             TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+                    <Button Content="保存实例启动设置" Style="{DynamicResource BtnPrimary}"
+                            Height="38" Margin="0,14,0,0" Click="SaveLaunchSettings_Click"/>
+                    <TextBlock x:Name="LaunchSettingsStatus" FontSize="11"
+                               Foreground="{DynamicResource TextMutedBrush}" Margin="0,8,0,0"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

@@ -1,0 +1,63 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>QuartzLauncher</AssemblyName>
+    <RootNamespace>QuartzLauncher</RootNamespace>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Version>1.0.1</Version>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DebugType>None</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>false</IncludeNativeLibrariesForSelfExtract>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2903.40" />
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="4.0.0" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\*.png" />
+    <Resource Include="Assets\app.ico" />
+    <Content Include="Assets\update-announcement.json">
+      <Link>Launcher\update-announcement.json</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="CleanPortablePublish" AfterTargets="Publish">
+    <ItemGroup>
+      <PublishXmlDocs Include="$(PublishDir)**\*.xml" />
+    </ItemGroup>
+    <Delete Files="@(PublishXmlDocs)" />
+  </Target>
+
+  <Target Name="KeepWebView2FilesInLauncher" AfterTargets="Publish">
+    <PropertyGroup>
+      <WebView2LoaderPath>$(PublishDir)WebView2Loader.dll</WebView2LoaderPath>
+      <WebView2LoaderTarget>$(PublishDir)Launcher\WebView2Loader.dll</WebView2LoaderTarget>
+      <WebView2RuntimePath>$(PublishDir)runtimes</WebView2RuntimePath>
+    </PropertyGroup>
+    <MakeDir Directories="$(PublishDir)Launcher" />
+    <Copy SourceFiles="$(WebView2LoaderPath)" DestinationFiles="$(WebView2LoaderTarget)" SkipUnchangedFiles="true" Condition="Exists('$(WebView2LoaderPath)')" />
+    <Delete Files="$(WebView2LoaderPath)" />
+    <RemoveDir Directories="$(WebView2RuntimePath)" Condition="Exists('$(WebView2RuntimePath)')" />
+  </Target>
+
+</Project>

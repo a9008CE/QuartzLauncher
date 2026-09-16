@@ -1,0 +1,24 @@
+<Page x:Class="QuartzLauncher.Views.Pages.SkinLibraryPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="Transparent">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="36,24">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                <Button Content="&#x2190;" FontFamily="Segoe UI Symbol" FontSize="10"
+                        Width="32" Height="32" Background="Transparent" BorderThickness="0"
+                        Foreground="{DynamicResource TextMutedBrush}" Cursor="Hand"
+                        Click="Back_Click" Margin="0,0,10,0"/>
+                <TextBlock Text="SKIN LIBRARY" Style="{DynamicResource PageEyebrow}" VerticalAlignment="Center"/>
+            </StackPanel>
+            <TextBlock Text="皮肤库" Style="{DynamicResource PageTitle}"/>
+            <TextBlock Text="这里保存所有历史导入的皮肤。右键皮肤卡片可以导入预览或删除。"
+                       Style="{DynamicResource PageSubtitle}"/>
+
+            <TextBlock x:Name="EmptyText" Text="皮肤库为空，请先导入皮肤。"
+                       Foreground="{DynamicResource TextMutedBrush}" FontSize="14"
+                       HorizontalAlignment="Center" Margin="0,80,0,0" Visibility="Collapsed"/>
+            <WrapPanel x:Name="SkinPanel" Margin="0,4,0,0"/>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

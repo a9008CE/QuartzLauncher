@@ -1,0 +1,135 @@
+<Page x:Class="QuartzLauncher.Views.Pages.HelpPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="Transparent">
+    <Grid Margin="28,24,28,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+            <TextBlock Text="HELP" Style="{DynamicResource PageEyebrow}"/>
+            <TextBlock Text="帮助" Style="{DynamicResource PageTitle}"/>
+            <TextBlock Text="本地问答与 MCP 工具操作。可以直接描述要安装的版本、加载器、Mod 和语言。" Style="{DynamicResource PageSubtitle}"/>
+        </StackPanel>
+
+        <Border Grid.Row="1" Style="{DynamicResource CardStyle}" Padding="16"
+                VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid>
+                <ScrollViewer x:Name="ChatScroll" VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled" Padding="4,4,8,4">
+                    <ItemsControl x:Name="ChatList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,6">
+                                    <TextBlock Text="{Binding Who}" FontSize="10"
+                                               Foreground="{DynamicResource TextMutedBrush}" Margin="4,0,0,3"/>
+                                    <Border Background="{Binding BubbleBrush}"
+                                            CornerRadius="10" Padding="10,8"
+                                            HorizontalAlignment="{Binding Alignment}"
+                                            MaxWidth="560">
+                                        <Grid>
+                                            <TextBox Text="{Binding Text}" FontSize="13"
+                                                     Foreground="{Binding TextColor}"
+                                                     Background="Transparent" BorderThickness="0"
+                                                     Padding="0"
+                                                     IsReadOnly="True" TextWrapping="Wrap"
+                                                     IsTabStop="False"
+                                                     Visibility="{Binding TextVisibility}"
+                                                     VerticalAlignment="Center"/>
+                                            <StackPanel Width="420" Visibility="{Binding EditorVisibility}">
+                                                <TextBlock Text="请填写安装选项，确认后才会开始下载。" FontSize="12"
+                                                           Foreground="{Binding TextColor}" Margin="0,0,0,10"/>
+                                                <Grid Margin="0,0,0,8">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="72"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="版本" VerticalAlignment="Center" Foreground="{Binding TextColor}"/>
+                                                    <ComboBox Grid.Column="1" ItemsSource="{Binding Versions}"
+                                                              SelectedItem="{Binding SelectedVersion, Mode=TwoWay}"
+                                                              SelectionChanged="InstallVersion_SelectionChanged"
+                                                              IsEnabled="{Binding IsEditorEnabled}"/>
+                                                </Grid>
+                                                <Grid Margin="0,0,0,8">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="72"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="加载器" VerticalAlignment="Center" Foreground="{Binding TextColor}"/>
+                                                    <ComboBox Grid.Column="1" ItemsSource="{Binding Loaders}"
+                                                              SelectedItem="{Binding SelectedLoader, Mode=TwoWay}"
+                                                              DisplayMemberPath="DisplayName"
+                                                              IsEnabled="{Binding IsEditorEnabled}"
+                                                              IsHitTestVisible="{Binding IsLoaderSelectionEnabled}"/>
+                                                </Grid>
+                                                <Grid Margin="0,0,0,8">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="72"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="Mod" VerticalAlignment="Top" Foreground="{Binding TextColor}" Margin="0,6,0,0"/>
+                                                    <TextBox Grid.Column="1" Text="{Binding ModText, UpdateSourceTrigger=PropertyChanged}"
+                                                             MinHeight="34" Padding="8,6" AcceptsReturn="True"
+                                                             TextWrapping="Wrap" ToolTip="可选，多个 Mod 用逗号或空格分隔"
+                                                             IsEnabled="{Binding IsEditorEnabled}"/>
+                                                </Grid>
+                                                <CheckBox Content="安装后使用简体中文" IsChecked="{Binding Chinese, Mode=TwoWay}"
+                                                          Foreground="{Binding TextColor}" Margin="72,0,0,10"
+                                                          IsEnabled="{Binding IsEditorEnabled}"/>
+                                                <TextBlock Text="{Binding EditorStatus}" TextWrapping="Wrap" FontSize="11"
+                                                           Foreground="{Binding TextColor}" Opacity="0.75" Margin="72,0,0,10"/>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                    <Button Content="取消" Tag="{Binding}" Click="InstallEditorCancel_Click"
+                                                            Padding="14,5" Margin="0,0,8,0"
+                                                            IsEnabled="{Binding IsEditorEnabled}"/>
+                                                    <Button Content="确认下载" Tag="{Binding}" Click="InstallEditorConfirm_Click"
+                                                            Style="{DynamicResource BtnPrimary}" Padding="14,5"
+                                                            IsEnabled="{Binding CanConfirmInstall}"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <TextBlock x:Name="EmptyHint" Text="你好，我是星落助手，关于启动器的任何用法都可以问我。"
+                           FontSize="12" Foreground="{DynamicResource TextMutedBrush}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           IsHitTestVisible="False"/>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="2" Margin="0,14,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="分析日志" Style="{DynamicResource BtnBase}"
+                    Height="32" Padding="10,2" Margin="0,0,8,0"
+                    ToolTip="使用 MCDoctor AI 分析最近一次日志" Click="AnalyzeLog_Click"/>
+            <Button Grid.Column="1" Content="指定日志分析" Style="{DynamicResource BtnBase}"
+                    Height="32" Padding="10,2" Margin="0,0,8,0"
+                    ToolTip="从最近 15 次日志中选择一个进行分析" Click="SelectLog_Click"/>
+            <Grid Grid.Column="2">
+                <TextBox x:Name="QuestionBox" Height="32" FontSize="13" Padding="10,0"
+                         VerticalContentAlignment="Center" TextChanged="QuestionBox_TextChanged"
+                         KeyDown="QuestionBox_KeyDown"/>
+                <TextBlock x:Name="QuestionPlaceholder" Text="例如：帮我下载版本" FontSize="13"
+                           Foreground="{DynamicResource TextMutedBrush}" Opacity="0.6"
+                           Margin="13,0,0,0" VerticalAlignment="Center"
+                           IsHitTestVisible="False"/>
+            </Grid>
+            <Button Grid.Column="3" Content="发送" Style="{DynamicResource BtnPrimary}"
+                    Height="32" Padding="14,2" Margin="8,0,0,0" x:Name="SendBtn"
+                    Click="Send_Click" IsEnabled="False"/>
+        </Grid>
+    </Grid>
+</Page>

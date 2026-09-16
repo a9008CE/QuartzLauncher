@@ -1,0 +1,98 @@
+<Page x:Class="QuartzLauncher.Views.Pages.LoaderPickerPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:services="clr-namespace:QuartzLauncher.Services"
+      Background="Transparent"
+      Loaded="OnLoaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border x:Name="LoaderBar" Grid.Column="0" Background="{DynamicResource SidebarBrush}"
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,1,0">
+            <DockPanel Margin="0,10,0,10">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,10,0,10">
+                    <Button Content="&#xE72B;" FontFamily="Segoe MDL2 Assets" FontSize="14"
+                            Width="32" Height="32" Background="Transparent" BorderThickness="0"
+                            Foreground="{DynamicResource TextMutedBrush}" Cursor="Hand"
+                            Click="Back_Click" Margin="16,0,0,0"/>
+                    <TextBlock Text="Mod 加载器" FontSize="16" FontWeight="Bold"
+                               Foreground="{DynamicResource TextBrush}"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <Border DockPanel.Dock="Top" Height="1" Background="{DynamicResource BorderBrush}"
+                        Margin="24,4,24,8"/>
+
+                <StackPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+                    <RadioButton x:Name="NavFabric" Style="{DynamicResource NavBtn}" GroupName="LoaderNav"
+                                 IsChecked="True" Click="NavFabric_Click">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="{DynamicResource NavTextAlignment}">
+                            <TextBlock Text="&#xE7B8;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                       Width="22" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="Fabric" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavFabricApi" Style="{DynamicResource NavBtn}" GroupName="LoaderNav"
+                                 Click="NavFabricApi_Click" Margin="20,0,0,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="{DynamicResource NavTextAlignment}">
+                            <TextBlock Text="&#xE7B8;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                       Width="22" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="Fabric API" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavForge" Style="{DynamicResource NavBtn}" GroupName="LoaderNav"
+                                 Click="NavForge_Click">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="{DynamicResource NavTextAlignment}">
+                            <TextBlock Text="&#xE7B8;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                       Width="22" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="Forge" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavNeoForge" Style="{DynamicResource NavBtn}" GroupName="LoaderNav"
+                                 Click="NavNeoForge_Click">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="{DynamicResource NavTextAlignment}">
+                            <TextBlock Text="&#xE7B8;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                       Width="22" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="NeoForge" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavQuilt" Style="{DynamicResource NavBtn}" GroupName="LoaderNav"
+                                 Click="NavQuilt_Click">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="{DynamicResource NavTextAlignment}">
+                            <TextBlock Text="&#xE7B8;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                       Width="22" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="Quilt" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavOptiFine" Style="{DynamicResource NavBtn}" GroupName="LoaderNav"
+                                 Click="NavOptiFine_Click">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="{DynamicResource NavTextAlignment}">
+                            <TextBlock Text="&#xE7B8;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                       Width="22" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="OptiFine" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavLiteLoader" Style="{DynamicResource NavBtn}" GroupName="LoaderNav"
+                                 Click="NavLiteLoader_Click">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="{DynamicResource NavTextAlignment}">
+                            <TextBlock Text="&#xE7B8;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                       Width="22" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="LiteLoader" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                </StackPanel>
+
+                <TextBlock DockPanel.Dock="Bottom" Text="{x:Static services:UpdateService.DisplayVersion}" FontSize="10"
+                           FontWeight="SemiBold" Foreground="{DynamicResource TextMutedBrush}"
+                           Margin="24,0,24,8" Opacity="0.6"/>
+            </DockPanel>
+        </Border>
+
+        <Frame x:Name="LoaderFrame" Grid.Column="1" NavigationUIVisibility="Hidden"
+               Background="Transparent"
+               SnapsToDevicePixels="True" UseLayoutRounding="True"/>
+    </Grid>
+</Page>

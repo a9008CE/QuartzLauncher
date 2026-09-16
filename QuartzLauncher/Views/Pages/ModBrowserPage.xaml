@@ -1,0 +1,240 @@
+<Page x:Class="QuartzLauncher.Views.Pages.ModBrowserPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:services="clr-namespace:QuartzLauncher.Services"
+      xmlns:pages="clr-namespace:QuartzLauncher.Views.Pages"
+      xmlns:local="clr-namespace:QuartzLauncher.Services"
+      Background="Transparent">
+    <Grid ClipToBounds="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border x:Name="Sidebar" Grid.Column="0" Background="{DynamicResource SidebarBrush}"
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,1,0">
+            <DockPanel Margin="0,10,0,10">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,10,0,10">
+                    <Button Content="&#xE72B;" FontFamily="Segoe MDL2 Assets" FontSize="14"
+                            Width="32" Height="32" Background="Transparent" BorderThickness="0"
+                            Foreground="{DynamicResource TextMutedBrush}" Cursor="Hand"
+                            Click="Back_Click" Margin="16,0,0,0"/>
+                    <TextBlock Text="资源中心" FontSize="16" FontWeight="Bold"
+                               Foreground="{DynamicResource TextBrush}"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <Border DockPanel.Dock="Top" Height="1" Background="{DynamicResource BorderBrush}"
+                        Margin="24,4,24,8"/>
+
+                <StackPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+                    <RadioButton x:Name="NavSearch" Style="{DynamicResource NavBtn}" GroupName="ModNav"
+                                 IsChecked="True" Click="NavSearch_Click">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="{DynamicResource NavTextAlignment}">
+                            <TextBlock Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                       Width="22" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="Mods 搜索" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavModpacks" Style="{DynamicResource NavBtn}" GroupName="ModNav"
+                                 Click="NavModpacks_Click">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="{DynamicResource NavTextAlignment}">
+                            <TextBlock Text="&#xE7F8;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                       Width="22" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="整合包下载" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavShaders" Style="{DynamicResource NavBtn}" GroupName="ModNav"
+                                 Click="NavShaders_Click">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="{DynamicResource NavTextAlignment}">
+                            <TextBlock Text="&#xE945;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                       Width="22" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="光影包下载" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavResourcePacks" Style="{DynamicResource NavBtn}" GroupName="ModNav"
+                                 Click="NavResourcePacks_Click">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="{DynamicResource NavTextAlignment}">
+                            <TextBlock Text="&#xE8B7;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                       Width="22" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="材质包下载" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavJava" Style="{DynamicResource NavBtn}" GroupName="ModNav"
+                                 Click="NavJava_Click">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="{DynamicResource NavTextAlignment}">
+                            <TextBlock Text="&#xE756;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                       Width="22" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="Java 下载" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavDownloads" Style="{DynamicResource NavBtn}" GroupName="ModNav"
+                                 Click="NavDownloads_Click">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="{DynamicResource NavTextAlignment}">
+                            <TextBlock Text="&#xE896;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                       Width="22" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="下载管理" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavSettings" Style="{DynamicResource NavBtn}" GroupName="ModNav"
+                                 Click="NavSettings_Click">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="{DynamicResource NavTextAlignment}">
+                            <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                       Width="22" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="下载设置" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                </StackPanel>
+
+                <TextBlock DockPanel.Dock="Bottom" Text="{x:Static services:UpdateService.DisplayVersion}" FontSize="10"
+                           FontWeight="SemiBold" Foreground="{DynamicResource TextMutedBrush}"
+                           Margin="24,0,24,8" Opacity="0.6"/>
+            </DockPanel>
+        </Border>
+
+        <Grid x:Name="BrowserContent" Grid.Column="1" ClipToBounds="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border x:Name="SearchHeader" Grid.Row="0" Padding="16,10,16,10"
+                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1">
+                <StackPanel HorizontalAlignment="Center" Width="520">
+                    <DockPanel Margin="0,0,0,8">
+                        <Button x:Name="SearchButton" Content="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="14"
+                                Style="{DynamicResource BtnBase}" Padding="10,4"
+                                Click="Search_Click" Height="30" VerticalAlignment="Center"
+                                Margin="0,0,8,0"/>
+                        <Grid>
+                            <TextBox x:Name="SearchBox" Height="30" VerticalContentAlignment="Center"
+                                     TextAlignment="Center"
+                                     Padding="10,0" FontSize="12" KeyDown="SearchBox_KeyDown"
+                                     TextChanged="SearchBox_TextChanged"
+                                     Background="{DynamicResource InputBgBrush}"
+                                     BorderBrush="{DynamicResource BorderBrush}"/>
+                            <TextBlock x:Name="SearchPlaceholder" Text="搜索 Mod..."
+                                       FontSize="12" Foreground="{DynamicResource TextMutedBrush}"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       IsHitTestVisible="False" Opacity="0.6"/>
+                        </Grid>
+                    </DockPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="8"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox x:Name="VersionCombo" Grid.Column="0" Height="28"
+                                  FontSize="12" VerticalContentAlignment="Center"
+                                  Background="{DynamicResource InputBgBrush}"
+                                  BorderBrush="{DynamicResource BorderBrush}"
+                                  Foreground="{DynamicResource TextBrush}"
+                                  SelectionChanged="Filter_Changed"/>
+                        <ComboBox x:Name="LoaderCombo" Grid.Column="2" Height="28"
+                                  FontSize="12" VerticalContentAlignment="Center"
+                                  Background="{DynamicResource InputBgBrush}"
+                                  BorderBrush="{DynamicResource BorderBrush}"
+                                  Foreground="{DynamicResource TextBrush}"
+                                  SelectionChanged="Filter_Changed"/>
+                    </Grid>
+                    <WrapPanel x:Name="CategoryPanel" HorizontalAlignment="Center" Margin="0,10,0,0">
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="300"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <DockPanel x:Name="ResultsPanel" Grid.Column="0" Grid.ColumnSpan="2" Margin="12,12,6,12">
+                    <TextBlock x:Name="HintText" DockPanel.Dock="Top" FontSize="12"
+                               Foreground="{DynamicResource TextMutedBrush}" Margin="16,0,0,8"
+                               Text="加载中..." VerticalAlignment="Center"/>
+                    <TextBlock x:Name="CountText" DockPanel.Dock="Top" FontSize="11"
+                               Foreground="{DynamicResource TextMutedBrush}" Margin="16,0,0,6"
+                               Visibility="Collapsed"/>
+                    <Border DockPanel.Dock="Bottom" x:Name="PagerBar" Visibility="Collapsed"
+                            Margin="0,10,0,0" Padding="8,6" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="FirstPageBtn" Content="&#xE892;" FontFamily="Segoe MDL2 Assets" FontSize="12"
+                                    Style="{DynamicResource BtnBase}" Width="34" Height="28" Padding="0"
+                                    Click="FirstPage_Click" ToolTip="首页"/>
+                            <Button x:Name="PrevPageBtn" Content="&#xE76B;" FontFamily="Segoe MDL2 Assets" FontSize="12"
+                                    Style="{DynamicResource BtnBase}" Width="34" Height="28" Padding="0" Margin="6,0,0,0"
+                                    Click="PrevPage_Click" ToolTip="上一页"/>
+                            <TextBlock x:Name="PageLabel" FontSize="12" Foreground="{DynamicResource TextBrush}"
+                                       VerticalAlignment="Center" Margin="12,0"/>
+                            <Button x:Name="NextPageBtn" Content="&#xE76C;" FontFamily="Segoe MDL2 Assets" FontSize="12"
+                                    Style="{DynamicResource BtnBase}" Width="34" Height="28" Padding="0" Margin="0,0,6,0"
+                                    Click="NextPage_Click" ToolTip="下一页"/>
+                            <Button x:Name="LastPageBtn" Content="&#xE893;" FontFamily="Segoe MDL2 Assets" FontSize="12"
+                                    Style="{DynamicResource BtnBase}" Width="34" Height="28" Padding="0"
+                                    Click="LastPage_Click" ToolTip="末页"/>
+                        </StackPanel>
+                    </Border>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <ListBox x:Name="ModList" BorderThickness="0"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                 VirtualizingPanel.ScrollUnit="Pixel"
+                                 ItemContainerStyle="{DynamicResource ListBoxItem}"/>
+                    </ScrollViewer>
+                </DockPanel>
+
+                <Border x:Name="LoadingOverlay" Grid.ColumnSpan="2" Panel.ZIndex="20"
+                        Background="{DynamicResource WindowBackgroundBrush}" Opacity="0.96"
+                        Visibility="Collapsed">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Grid Width="86" Height="86" HorizontalAlignment="Center">
+                            <Ellipse Width="64" Height="64" Stroke="{DynamicResource BorderBrush}"
+                                     StrokeThickness="2" Opacity="0.65"/>
+                            <Path x:Name="RadarSweep" Width="64" Height="64"
+                                  Data="M 32,2 A 30,30 0 0 1 58,18"
+                                  Stroke="{DynamicResource PrimaryBrush}" StrokeThickness="4"
+                                  StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                  RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <RotateTransform/>
+                                </Path.RenderTransform>
+                            </Path>
+                            <Ellipse Width="8" Height="8" Fill="{DynamicResource PrimaryBrush}"
+                                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        <TextBlock Text="正在扫描资源" FontSize="13" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}" HorizontalAlignment="Center"
+                                   Margin="0,12,0,0"/>
+                        <TextBlock x:Name="LoadingDotsText" Text="连接资源索引..."
+                                   FontSize="11" Foreground="{DynamicResource TextMutedBrush}"
+                                   HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Border x:Name="DetailPanel" Grid.RowSpan="2" Panel.ZIndex="30"
+                    Background="{DynamicResource SidebarBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0"
+                    Visibility="Collapsed" RenderTransformOrigin="0.5,0.5"
+                    ClipToBounds="True">
+                <DockPanel>
+                    <DockPanel DockPanel.Dock="Top" Margin="16,12,16,8">
+                        <Button Content="&#xE8BB;" FontFamily="Segoe MDL2 Assets" FontSize="10"
+                                Width="24" Height="24" Background="Transparent" BorderThickness="0"
+                                Foreground="{DynamicResource TextMutedBrush}" Cursor="Hand"
+                                Click="CloseDetail_Click" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBlock Text="详情" FontSize="13" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                    </DockPanel>
+                    <Border Height="1" Background="{DynamicResource BorderBrush}" Margin="16,0"/>
+                    <Frame x:Name="DetailFrame" Padding="0,4,16,0"
+                           NavigationUIVisibility="Hidden" Background="Transparent"/>
+                </DockPanel>
+            </Border>
+        </Grid>
+
+        <pages:DownloadCenterPage x:Name="DownloadPage" Grid.Column="1" Visibility="Collapsed"/>
+        <pages:JavaDownloadPage x:Name="JavaPage" Grid.Column="1" Visibility="Collapsed"/>
+    </Grid>
+</Page>

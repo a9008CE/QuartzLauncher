@@ -1,0 +1,11 @@
+<Page x:Class="QuartzLauncher.Views.Pages.PresetPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="Transparent">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="36,24" MaxWidth="750">
+            <TextBlock x:Name="PresetTitle" Text="预设" Style="{DynamicResource PageTitle}"/>
+            <TextBlock Text="在此配置该预设的游戏版本参数。" Style="{DynamicResource PageSubtitle}"/>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

@@ -1,0 +1,240 @@
+<UserControl x:Class="QuartzLauncher.Views.Pages.DownloadCenterPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="Transparent">
+    <Grid Margin="24,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Margin="0,0,0,18">
+            <StackPanel>
+                <TextBlock Text="DOWNLOADS" FontSize="10" FontWeight="SemiBold"
+                           Foreground="{DynamicResource PrimaryBrush}"/>
+                <TextBlock x:Name="TitleText" Text="下载管理" FontSize="22" FontWeight="SemiBold"
+                           Foreground="{DynamicResource TextBrush}" Margin="0,3,0,0"/>
+                <TextBlock x:Name="SummaryText" Text="暂无下载任务" FontSize="12"
+                           Foreground="{DynamicResource TextMutedBrush}" Margin="0,5,0,0"/>
+            </StackPanel>
+            <Button Content="取消全部" Style="{DynamicResource BtnDanger}"
+                    Padding="14,5" HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Click="CancelAll_Click"/>
+        </DockPanel>
+
+        <Border Grid.Row="1" Background="{DynamicResource InputBgBrush}"
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
+                CornerRadius="6" Padding="12,9" Margin="0,0,0,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <CheckBox x:Name="AutoThreadsCheck" Content="自动检测网络并分配线程"
+                          Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"
+                          Checked="AutoThreads_Changed" Unchecked="AutoThreads_Changed"/>
+                <Slider x:Name="ThreadSlider" Grid.Column="1" Minimum="1" Maximum="16"
+                        TickFrequency="1" IsSnapToTickEnabled="True" Margin="18,0"
+                        VerticalAlignment="Center" ValueChanged="ThreadSlider_Changed"/>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="当前 " FontSize="11" Foreground="{DynamicResource TextMutedBrush}"/>
+                    <TextBlock x:Name="ThreadCountText" Text="3" FontSize="12" FontWeight="SemiBold"
+                               Foreground="{DynamicResource PrimaryBrush}"/>
+                    <TextBlock Text=" 线程" FontSize="11" Foreground="{DynamicResource TextMutedBrush}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <ListBox x:Name="TaskList" Grid.Row="2" BorderThickness="0" Background="Transparent"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Style="{DynamicResource CardStyle}" Padding="14,10" Margin="0,0,0,6">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                           VerticalAlignment="Center" HorizontalAlignment="Center"
+                                           Text="&#xE895;" Tag="{Binding}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}"/>
+                                            <Setter Property="Text" Value="&#xE895;"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Status}" Value="Paused">
+                                                    <Setter Property="Text" Value="&#xE769;"/>
+                                                    <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status}" Value="Failed">
+                                                    <Setter Property="Text" Value="&#xE783;"/>
+                                                    <Setter Property="Foreground" Value="{DynamicResource DangerBrush}"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status}" Value="Completed">
+                                                    <Setter Property="Text" Value="&#xE73E;"/>
+                                                    <Setter Property="Foreground" Value="{DynamicResource SuccessBrush}"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status}" Value="Cancelled">
+                                                    <Setter Property="Text" Value="&#xE711;"/>
+                                                    <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                                    <DockPanel>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                                                    Margin="8,0,0,0">
+                                            <TextBlock Text="{Binding BytesText}" FontSize="11"
+                                                       Foreground="{DynamicResource TextMutedBrush}" Margin="16,0,0,0"/>
+                                            <TextBlock Text="{Binding Speed}" FontSize="11"
+                                                       Foreground="{DynamicResource PrimaryBrush}" Margin="16,0,0,0"/>
+                                            <TextBlock Text="{Binding StatusText}" FontSize="11"
+                                                       Foreground="{DynamicResource TextMutedBrush}" Margin="16,0,0,0"/>
+                                        </StackPanel>
+                                        <TextBlock Text="{Binding Name}" FontSize="13" FontWeight="SemiBold"
+                                                   Foreground="{DynamicResource TextBrush}" TextTrimming="CharacterEllipsis"/>
+                                    </DockPanel>
+                                    <Grid Margin="0,6,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ProgressBar Height="4" Minimum="0" Maximum="100"
+                                                     Value="{Binding Progress}" Foreground="{DynamicResource PrimaryBrush}"
+                                                     Background="{DynamicResource BorderBrush}"/>
+                                        <Button Grid.Column="1" FontSize="10" Padding="6,2" Margin="8,0,0,0"
+                                                Tag="{Binding}" Click="Expand_Click"
+                                                Cursor="Hand" Background="Transparent" BorderThickness="0"
+                                                Foreground="{DynamicResource TextMutedBrush}">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Content" Value="▼ 文件详情"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsExpanded}" Value="True">
+                                                            <Setter Property="Content" Value="▲ 收起文件"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding ItemProgresses.Count}" Value="0">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                    </Grid>
+                                    <TextBlock Text="{Binding ProgressText}" FontSize="10" Margin="0,4,0,0"
+                                               Foreground="{DynamicResource TextMutedBrush}"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Button Content="暂停/继续" Style="{DynamicResource BtnBase}" FontSize="11"
+                                            Padding="9,3" Tag="{Binding}" Click="TogglePause_Click"/>
+                                    <Button Content="取消" Style="{DynamicResource BtnDanger}" FontSize="11"
+                                            Padding="9,3" Margin="4,0,0,0" Tag="{Binding}" Click="Cancel_Click"/>
+                                    <Button Content="关闭" FontSize="11" Padding="9,3" Margin="4,0,0,0"
+                                            Tag="{Binding}" Click="Close_Click">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource BtnBase}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Failed">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Completed">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Cancelled">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                            <Border Grid.Row="1" Background="{DynamicResource InputBgBrush}"
+                                    CornerRadius="6" Padding="8" Margin="30,8,0,0"
+                                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsExpanded}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <ScrollViewer MaxHeight="160" VerticalScrollBarVisibility="Auto"
+                                              HorizontalScrollBarVisibility="Disabled">
+                                    <ItemsControl ItemsSource="{Binding ItemProgresses}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,0,0,6">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <DockPanel>
+                                                        <TextBlock Text="{Binding StatusText}" FontSize="10" Width="40"
+                                                                   Foreground="{DynamicResource TextMutedBrush}"/>
+                                                        <TextBlock Text="{Binding FileName}" FontSize="11"
+                                                                   Foreground="{DynamicResource TextBrush}"
+                                                                   TextTrimming="CharacterEllipsis"/>
+                                                        <TextBlock Text="{Binding BytesText}" FontSize="10"
+                                                                   Foreground="{DynamicResource TextMutedBrush}"
+                                                                   HorizontalAlignment="Right" Margin="8,0,0,0"/>
+                                                    </DockPanel>
+                                                    <ProgressBar Grid.Row="1" Height="3" Minimum="0" Maximum="100"
+                                                                 Value="{Binding Progress}"
+                                                                 Foreground="{DynamicResource PrimaryBrush}"
+                                                                 Background="{DynamicResource BorderBrush}"
+                                                                 Margin="48,3,0,0">
+                                                        <ProgressBar.Style>
+                                                            <Style TargetType="ProgressBar"
+                                                                   BasedOn="{StaticResource {x:Type ProgressBar}}">
+                                                                <Setter Property="Visibility" Value="Visible"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsCompleted}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </ProgressBar.Style>
+                                                    </ProgressBar>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Border>
+                            <TextBlock Grid.Row="2" Text="{Binding Error}" TextWrapping="Wrap"
+                                       FontSize="11" Foreground="{DynamicResource DangerBrush}" Margin="30,8,0,0">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Error}" Value="">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

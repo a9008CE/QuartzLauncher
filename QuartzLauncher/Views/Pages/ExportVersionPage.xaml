@@ -1,0 +1,88 @@
+<Page x:Class="QuartzLauncher.Views.Pages.ExportVersionPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="Transparent">
+    <Grid Margin="28,24">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="330"/>
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Padding="0,0,20,0">
+            <StackPanel MaxWidth="720" HorizontalAlignment="Left">
+            <TextBlock Text="EXPORT" Style="{DynamicResource PageEyebrow}"/>
+            <TextBlock Text="导出数据" Style="{DynamicResource PageTitle}"/>
+            <TextBlock Text="生成带版本清单和内容校验边界的 QuartzPack，方便迁移或分享。" Style="{DynamicResource PageSubtitle}"/>
+
+            <Border Style="{DynamicResource CardStyle}" Margin="0,0,0,16"
+                    Tag="content" MouseEnter="Card_MouseEnter" MouseLeave="Card_MouseLeave">
+                <StackPanel>
+                    <TextBlock Text="导出内容" Style="{DynamicResource SectionHeader}" Margin="0,0,0,10"/>
+                    <TextBlock Text="基础版本和加载器写入清单，游戏库与账户凭据不会被打包。以下是可选内容："
+                               FontSize="11" Foreground="{DynamicResource TextMutedBrush}"
+                               TextWrapping="Wrap" Margin="0,0,0,12"/>
+                    <CheckBox x:Name="IncludeMods" Content="Mods（模组）" IsChecked="True"
+                              FontSize="12" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,8"/>
+                    <CheckBox x:Name="IncludeResourcePacks" Content="资源包 / 材质包" IsChecked="True"
+                              FontSize="12" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,8"/>
+                    <CheckBox x:Name="IncludeShaderPacks" Content="光影包" IsChecked="True"
+                              FontSize="12" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,8"/>
+                    <CheckBox x:Name="IncludeSaves" Content="存档（saves）" IsChecked="True"
+                              FontSize="12" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,8"/>
+                    <CheckBox x:Name="IncludeCrashes" Content="崩溃报告" IsChecked="False"
+                              FontSize="12" Foreground="{DynamicResource TextBrush}"/>
+                    <CheckBox x:Name="IncludeGameSettings" Content="游戏设置（键位 / 音量 / 视频，options.txt、servers.dat）"
+                              IsChecked="True" FontSize="12" Foreground="{DynamicResource TextBrush}"
+                              Margin="0,10,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{DynamicResource CardStyle}"
+                    Tag="export" MouseEnter="Card_MouseEnter" MouseLeave="Card_MouseLeave">
+                <StackPanel>
+                    <TextBlock Text="导出" Style="{DynamicResource SectionHeader}" Margin="0,0,0,10"/>
+                    <Button x:Name="ExportButton" Content="导出 QuartzPack" Style="{DynamicResource BtnPrimary}"
+                            Height="40" FontSize="13" HorizontalAlignment="Left" Padding="24,4"
+                            Click="Export_Click"/>
+                    <TextBlock x:Name="ExportStatus" FontSize="11"
+                               Foreground="{DynamicResource TextMutedBrush}" Margin="0,10,0,0"
+                               TextWrapping="Wrap" Visibility="Collapsed"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{DynamicResource CardStyle}" Margin="0,16,0,0"
+                    Tag="io" MouseEnter="Card_MouseEnter" MouseLeave="Card_MouseLeave">
+                <StackPanel>
+                    <TextBlock Text="读取 / 写入" Style="{DynamicResource SectionHeader}" Margin="0,0,0,10"/>
+                    <TextBlock Text="重新从磁盘读取实例信息，或把当前实例数据强制写入配置文件。"
+                               FontSize="11" Foreground="{DynamicResource TextMutedBrush}"
+                               TextWrapping="Wrap" Margin="0,0,0,12"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="读取" Style="{DynamicResource BtnBase}" Padding="18,6"
+                                Click="LoadData_Click"/>
+                        <Button Content="写入" Style="{DynamicResource BtnBase}" Padding="18,6"
+                                Margin="10,0,0,0" Click="WriteData_Click"/>
+                    </StackPanel>
+                    <TextBlock x:Name="IoStatus" FontSize="11"
+                               Foreground="{DynamicResource TextMutedBrush}" Margin="0,10,0,0"
+                               TextWrapping="Wrap" Visibility="Collapsed"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Column="1">
+            <Border Style="{DynamicResource CardStyle}" Padding="24,22">
+                <StackPanel>
+                    <TextBlock Text="使用帮助" FontSize="16" FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextBrush}" Margin="0,0,0,14"/>
+                    <TextBlock x:Name="HelpDesc" FontSize="13"
+                               Foreground="{DynamicResource TextMutedBrush}"
+                               LineHeight="22"
+                               Text="将鼠标移到左侧的设置卡片上，可查看对应的使用说明。"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Page>
