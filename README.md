@@ -25,9 +25,10 @@ QuartzLauncher/          启动器源码（WPF + .NET 8）
   Services/              下载、启动、主题、更新、日志分析等服务
   Themes/                样式与配色
   Views/                 页面
-website/                 官网（静态页面）
 QuartzLauncher.sln       解决方案
 ```
+
+> 官网（`website/`）不参与开源，未包含在本仓库中。
 
 ## 构建
 
@@ -43,10 +44,19 @@ dotnet publish QuartzLauncher/QuartzLauncher.csproj -c Release -o dist
 
 - 本仓库不包含第三方项目 `PCL-source`，相关源码版权归 PCL2 作者所有
 - `Launcher/` 与 `.minecraft/` 为运行时数据目录（含账号信息），已在 `.gitignore` 中排除
+- 官网（`website/`）不参与开源
 
 ## 许可证
 
-本项目基于 [MIT License](LICENSE) 开源。
+本项目采用《星落 LaunCher 分发有限许可》与《合理使用指南》，**不是**标准开源协议。
+详见 [LICENSE](LICENSE)。
+
+简要来说：
+
+- 参考小部分内容：署名即可
+- 修改或重新实现实质功能（重度使用）：必须标明是第三方二次创作、名称以「星落 LaunCher」开头并加第三方后缀、公开源码、继续沿用本指南，且不得倒卖或付费解锁
+
+开源方式参考了 [Plain Craft Launcher 2](https://github.com/Meloong-Git/PCL)，特此致谢。
 
 ## 联系
 

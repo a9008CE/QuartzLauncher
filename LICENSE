@@ -1,21 +1,52 @@
-MIT License
+《星落 LaunCher 分发有限许可》
 
-Copyright (c) 2026 a9008CE
+—————————————————————————————————————
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+《星落 LaunCher 存储库合理使用指南》
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+本指南仅作为说明，不是法律文件或协议。
+除《星落 LaunCher 分发有限许可》明确授予的权利外，开发者保留软件及其相关知识产权中的全部权利。
+但开发者承诺，在遵守本指南，且善意、合理使用的情况下，不会追究责任。
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+一、轻度使用
+
+若您仅参考了本存储库中极小部分的内容，或您制作的软件与星落 LaunCher 的实质功能不存在任何重叠，则为轻度使用。
+其常见情形例如：
+· 使用或参考存储库中极小部分的内容，来开发启动器或其他软件。
+· 虽参考了较大量的内容，但制作的软件与星落 LaunCher 的实质功能不存在任何重叠。
+
+若属于轻度使用，您需要：
+1、以适当的形式给出署名。
+2、不得将您的内容与星落 LaunCher 混淆，或暗示您的内容与星落 LaunCher 有关。
+　例如：您的内容不得使用「星落 Launcher 手机版」「Starfall Launcher Pro」等会造成混淆或暗示这与星落 LaunCher 有关的名称。
+
+二、重度使用
+
+若不符合轻度使用的情形，即为重度使用。
+其常见情形例如：
+· 基于本存储库进行修改。
+· 参考存储库中较大量的内容，以制作或重新实现星落 LaunCher 的部分实质功能（例如启动 Minecraft、下载或管理 Mod、皮肤系统、主题系统等）。
+
+若属于重度使用，您需要：
+1、明确表示您的内容是第三方基于星落 LaunCher 独立进行二次创作的产物。
+2、您的内容的名称必须以「星落 LaunCher」开头，并在其后添加足以表现其由第三方修改的后缀。
+　允许的示例：星落 LaunCher 某服务器修改版、星落 LaunCher (XX Bug Fix)、星落 LaunCher XXX 修改版。
+　禁止的示例：星落 LaunCher 官方版、星落 LaunCher Plus、星落 LaunCher Pro、星落 LaunCher 手机版（这像是官方的后续作品）。
+3、在关于页面的首位给出开发者的署名及联系方式，公开源代码，并继续使用本文件作为指南。
+4、不得将本软件或其衍生版本用于倒卖、商业售卖、提供付费下载，或任何形式的付费解锁。
+5、不得移除或弱化本软件中的正版购买劝导相关内容。
+
+—————————————————————————————————————
+
+说人话的备注：
+
+这些规则主要是为了阻止恶意的使用、倒卖和「山寨版」的出现，常规、善意的使用都没啥问题的，放心吧！
+
+如果你只是参考了一小段代码，署个名就行啦，不用担心。
+
+—————————————————————————————————————
+
+致谢
+
+本项目的开源方式参考了 Plain Craft Launcher 2 (PCL2) 的做法，特此致谢。
+PCL2 项目地址：https://github.com/Meloong-Git/PCL
