@@ -44,6 +44,16 @@ public class Settings
     public string VersionIsolationMode { get; set; } = VersionIsolationModes.All;
     public bool AutoMemory { get; set; } = false;
     public bool MemoryOptimize { get; set; } = false;
+
+    /// <summary>累计游戏时长（秒），用于联机功能的防滥用门槛。</summary>
+    public long TotalPlaySeconds { get; set; } = 0;
+
+    /// <summary>
+    /// 联机房间是否允许非正版玩家进入（对应局域网服务端 online-mode=false）。
+    /// 开启后「开房用」的启动会改用离线会话，使局域网世界不作正版验证。
+    /// 注意：默认关闭 —— 强制离线会导致「加入别人的服务器」时报无效会话。
+    /// </summary>
+    public bool LanAllowNonPremium { get; set; } = false;
     public string LastFabricLoader { get; set; } = "";
     public string LastForgeLoader { get; set; } = "";
     public bool AutoInstallLoader { get; set; } = true;

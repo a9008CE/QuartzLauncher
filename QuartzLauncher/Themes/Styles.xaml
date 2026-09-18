@@ -12,6 +12,7 @@
     </Style>
 
     <Style x:Key="BtnBase" TargetType="Button">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Background" Value="{DynamicResource GlassControlBrush}"/>
         <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource GlassControlBorderBrush}"/>
@@ -53,6 +54,7 @@
     </Style>
 
     <Style x:Key="BtnPrimary" TargetType="Button">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Background" Value="{DynamicResource GlassPrimaryBrush}"/>
         <Setter Property="Foreground" Value="{DynamicResource PrimaryButtonForeground}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource GlassPrimaryBorderBrush}"/>
@@ -91,6 +93,7 @@
     </Style>
 
     <Style x:Key="BtnDanger" TargetType="Button">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Foreground" Value="{DynamicResource DangerButtonForeground}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource GlassDangerBorderBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -372,6 +375,7 @@
     </Style>
 
     <Style x:Key="IosSwitch" TargetType="ToggleButton">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Width" Value="48"/>
         <Setter Property="Height" Value="28"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -557,6 +561,7 @@
     </Style>
 
     <Style x:Key="NavBtn" TargetType="RadioButton">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -666,6 +671,7 @@
     </Style>
 
     <Style x:Key="ToggleBtn" TargetType="RadioButton">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BorderBrush" Value="{DynamicResource GlassControlBorderBrush}"/>
@@ -792,6 +798,7 @@
     </Style>
 
     <Style x:Key="DownloadPanelBtn" TargetType="Button">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -813,6 +820,7 @@
     </Style>
 
     <Style x:Key="WindowBtn" TargetType="Button">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
@@ -842,6 +850,7 @@
     </Style>
 
     <Style x:Key="CloseBtn" TargetType="Button">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
@@ -871,4 +880,8 @@
         </Setter>
     </Style>
 
+    <!-- 鍘绘帀閿洏瀵艰埅锛堟寜 Alt / Tab锛夋椂鐨勭劍鐐硅櫄绾挎锛氳鐩栫郴缁熺劍鐐硅瑙夋牱寮忥紝鍏ㄥ眬鐢熸晥 -->
+    <Style x:Key="{x:Static SystemParameters.FocusVisualStyleKey}">
+        <Setter Property="Control.Template" Value="{x:Null}"/>
+    </Style>
 </ResourceDictionary>

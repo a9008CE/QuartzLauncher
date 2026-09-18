@@ -1,4 +1,4 @@
-﻿#if !FULL_BUILD
+#if !FULL_BUILD
 using System.IO;
 using Newtonsoft.Json;
 

@@ -1,0 +1,111 @@
+<Page x:Class="QuartzLauncher.Views.Pages.MultiplayerPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="Transparent">
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="36,24" MaxWidth="800">
+
+                <!-- 防滥用门槛（达标后隐藏） -->
+                <Border x:Name="GateCard" Style="{DynamicResource CardStyle}" Margin="0,0,0,16"
+                        Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock x:Name="GateTitle" Text="暂不可用" FontSize="15" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}" Margin="0,0,0,8"/>
+                        <TextBlock x:Name="GateMessage" FontSize="13" TextWrapping="Wrap" LineHeight="22"
+                                   Foreground="{DynamicResource TextMutedBrush}"/>
+                        <ProgressBar x:Name="GateProgress" Height="8" Minimum="0" Maximum="100" Value="0"
+                                     Margin="0,16,0,0" Foreground="{DynamicResource PrimaryBrush}"
+                                     BorderThickness="0"/>
+                        <TextBlock x:Name="GateDetail" FontSize="11" Margin="0,8,0,0"
+                                   Foreground="{DynamicResource TextMutedBrush}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- 大厅 -->
+                <Grid x:Name="LobbyRoot" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,14">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="LobbyTitle" Text="联机大厅" FontSize="15" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                        <TextBox x:Name="SearchBox" Grid.Column="1" Width="150" Height="30" FontSize="12"
+                                 Margin="16,0,0,0" VerticalContentAlignment="Center" MaxLength="6"
+                                 ToolTip="输入 6 位房间号搜索"
+                                 Background="{DynamicResource InputBgBrush}"
+                                 Foreground="{DynamicResource TextBrush}"
+                                 BorderBrush="{DynamicResource BorderBrush}"
+                                 TextChanged="SearchBox_TextChanged"/>
+                        <TextBlock x:Name="LobbyStatus" Grid.Column="3" FontSize="12"
+                                   Foreground="{DynamicResource TextMutedBrush}"
+                                   VerticalAlignment="Center" Margin="0,0,12,0"/>
+                        <Button x:Name="RefreshBtn" Grid.Column="4" Content="刷新"
+                                Style="{DynamicResource BtnBase}" Padding="14,6"
+                                Click="Refresh_Click"/>
+                    </Grid>
+
+                    <TextBlock x:Name="EmptyHint" Grid.Row="1" Text="暂无公开房间"
+                               FontSize="13" Foreground="{DynamicResource TextMutedBrush}"
+                               Margin="0,32,0,0" HorizontalAlignment="Center"/>
+
+                    <StackPanel x:Name="RoomList" Grid.Row="2"/>
+                </Grid>
+
+                <!-- 房间详情 -->
+                <Border x:Name="DetailCard" Style="{DynamicResource CardStyle}" Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock x:Name="DetailName" FontSize="17" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}"/>
+                        <TextBlock x:Name="DetailMeta" FontSize="12" Margin="0,8,0,0" TextWrapping="Wrap"
+                                   Foreground="{DynamicResource TextMutedBrush}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                            <TextBlock x:Name="DetailAddrText" FontSize="13" FontFamily="Consolas"
+                                       VerticalAlignment="Center"
+                                       Foreground="{DynamicResource PrimaryBrush}"/>
+                            <Button x:Name="CopyAddrBtn" Content="复制" Style="{DynamicResource BtnBase}"
+                                    Padding="10,3" Margin="8,0,0,0" FontSize="11"
+                                    Click="CopyAddr_Click"/>
+                        </StackPanel>
+
+                        <TextBlock x:Name="DetailMods" FontSize="11" FontFamily="Consolas"
+                                   Margin="0,12,0,0" TextWrapping="Wrap" MaxHeight="180"
+                                   Foreground="{DynamicResource TextMutedBrush}"/>
+
+                        <TextBlock x:Name="PasswordLabel" Text="联机密码" FontSize="12" Margin="0,16,0,6"
+                                   Visibility="Collapsed"
+                                   Foreground="{DynamicResource TextMutedBrush}"/>
+                        <TextBox x:Name="PasswordBox" Height="32" FontSize="13" MaxLength="16"
+                                 Visibility="Collapsed"
+                                 Background="{DynamicResource InputBgBrush}"
+                                 Foreground="{DynamicResource TextBrush}"
+                                 BorderBrush="{DynamicResource BorderBrush}"/>
+
+                        <TextBlock x:Name="JoinHint" FontSize="12" Margin="0,14,0,0"
+                                   TextWrapping="Wrap"
+                                   Foreground="{DynamicResource TextMutedBrush}"/>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+                            <Button Content="收起" Style="{DynamicResource BtnBase}"
+                                    Height="36" Padding="16,4" Margin="0,0,8,0"
+                                    Click="Back_Click"/>
+                            <Button x:Name="JoinBtn" Content="加入房间" Style="{DynamicResource BtnPrimary}"
+                                    Height="36" Padding="20,4" Click="Join_Click"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

@@ -17,8 +17,12 @@ public partial class HomePage : Page
 {
     private readonly VersionsPage _versionsPage;
     private Process? _gameProcess;
+    private DateTime _gameStartedAt;
     private bool _userTerminated;
     private bool _launchInProgress;
+    private LanWorldWatcher? _lanWatcher;
+    private RelayClient? _relayClient;
+    private readonly HashSet<int> _promptedLanPorts = new();
     private DispatcherTimer? _logTimer;
     private readonly LogAnalyzer _logAnalyzer = new();
     private readonly LoginService _loginService = new(App.Settings);
@@ -422,7 +426,16 @@ public partial class HomePage : Page
             }
 
             SetStep("构建启动命令", 0.6);
-            var (java, args, cwd) = minecraft.BuildCommand(instance, javaInfo.Path);
+            var quickPlay = QuickPlayRequest.Consume();
+            AppendLog(quickPlay != null
+                ? $"[INFO] 一键加入模式：使用当前账号会话连接 {quickPlay}"
+                : App.Settings.Data.LanAllowNonPremium && App.Settings.Data.AuthMode != AuthModes.Offline
+                    ? "[INFO] 联机兼容模式：本次以离线会话启动 → 局域网允许非正版玩家进入"
+                    : "[INFO] 正版会话启动 → 局域网将开启正版验证（仅正版账号可加入）");
+
+            if (quickPlay != null)
+                AppendLog($"[INFO] 启动后自动加入服务器 {quickPlay}");
+            var (java, args, cwd) = minecraft.BuildCommand(instance, javaInfo.Path, quickPlay);
             var processStartInfo = new ProcessStartInfo(java)
             {
                 WorkingDirectory = cwd,
@@ -441,6 +454,8 @@ public partial class HomePage : Page
 
             SetStep("启动游戏进程", 0.75);
             _gameProcess = Process.Start(processStartInfo);
+            _gameStartedAt = DateTime.UtcNow;
+            StartLanWatcher(instance);
             try { _gameProcess!.PriorityClass = ProcessPriorityClass.AboveNormal; } catch { }
             ForceStopBtn.Visibility = Visibility.Collapsed;
             StopBtn.Visibility = Visibility.Visible;
@@ -469,6 +484,137 @@ public partial class HomePage : Page
         }
     }
 
+    /// <summary>联机大厅「一键启动并加入」：回到首页后直接启动游戏。</summary>
+    public void StartQuickPlayLaunch()
+    {
+        if (_launchInProgress) return;
+        Launch_Click(this, new RoutedEventArgs());
+    }
+
+    // ===== 局域网世界监听（自动发现「对局域网开放」）=====
+
+    private void StartLanWatcher(Instance instance)
+    {
+        StopLanWatcher();
+        _promptedLanPorts.Clear();
+        try
+        {
+            var gameDir = InstancePathService.GetGameDirectory(App.Paths, App.Settings.Data, instance);
+            var watcher = new LanWorldWatcher(gameDir);
+            watcher.WorldDetected += info =>
+                Dispatcher.BeginInvoke(() => OnLanWorldDetected(instance, gameDir, info));
+            watcher.WorldClosed += port =>
+                Dispatcher.BeginInvoke(() =>
+                {
+                    // 允许同一端口下次开启时重新弹窗
+                    _promptedLanPorts.Remove(port);
+                    if (_relayClient == null) return;
+                    AppendLog($"[INFO] 局域网世界已关闭（端口 {port}），正在关闭联机房间…");
+                    CloseRelayClient();
+                });
+            watcher.Start();
+            _lanWatcher = watcher;
+        }
+        catch
+        {
+            _lanWatcher = null;
+        }
+    }
+
+    private void StopLanWatcher()
+    {
+        try { _lanWatcher?.Stop(); } catch { }
+        _lanWatcher = null;
+    }
+
+    private void OnLanWorldDetected(Instance instance, string gameDir, LanWorldInfo info)
+    {
+        if (!_promptedLanPorts.Add(info.Port)) return;
+
+        LocalModSnapshot snapshot;
+        try
+        {
+            snapshot = LocalModScanner.Scan(gameDir, instance.Loader);
+        }
+        catch
+        {
+            snapshot = new LocalModSnapshot(false, "vanilla", new List<LocalModEntry>());
+        }
+
+        var result = LanShareDialog.Show(Window.GetWindow(this), info, snapshot,
+            App.Settings.Data.LanAllowNonPremium);
+        App.Settings.Data.LanAllowNonPremium = result.AllowNonPremium;
+        App.Settings.Save();
+        var choiceText = result.Choice switch
+        {
+            LanShareChoice.Public => "公开",
+            LanShareChoice.KeyOnly => "仅密钥",
+            LanShareChoice.Private => "不公开",
+            _ => "未处理"
+        };
+        AppendLog($"[INFO] 检测到局域网世界「{info.Motd}」(端口 {info.Port}) · {snapshot.KindText} {snapshot.SummaryText} → {choiceText}");
+
+        AppendLog(result.AllowNonPremium
+            ? "[INFO] 联机房间允许非正版玩家进入（下次启动游戏生效）"
+            : "[WARN] 联机房间已开启正版验证，仅正版账号可加入（下次启动游戏生效）");
+
+        if (result.Choice is LanShareChoice.Public or LanShareChoice.KeyOnly)
+            _ = PublishLanRoomAsync(instance, info, snapshot, result.Password);
+    }
+
+    // 把局域网世界发布到联机中继
+    private async Task PublishLanRoomAsync(Instance instance, LanWorldInfo info, LocalModSnapshot snapshot, string password)
+    {
+        try
+        {
+            CloseRelayClient();
+            var client = new RelayClient(RelayClient.RelayHost, info.Port);
+            client.Log += text => Dispatcher.BeginInvoke(() => AppendLog("[联机] " + text));
+            _relayClient = client;
+
+            var mc = string.IsNullOrWhiteSpace(instance.McVersion) ? instance.VersionId : instance.McVersion;
+            var gameDir = InstancePathService.GetGameDirectory(App.Paths, App.Settings.Data, instance);
+            var mods = snapshot.Mods.Count > 0
+                ? await Task.Run(() => LocalModScanner.Scan(gameDir, instance.Loader, withHash: true).Mods)
+                : snapshot.Mods;
+
+            var owner = App.Settings.Data.AuthMode == AuthModes.Offline
+                ? App.Settings.Data.PlayerName
+                : App.Settings.Data.AuthPlayerName;
+            var ok = await client.CreateRoomAsync(
+                info.Motd, mc, snapshot.Modded ? "modded" : "vanilla",
+                instance.Loader ?? "", mods.Count, password, 10, mods, owner);
+
+            if (ok)
+                AppendLog($"[INFO] 房间已发布：房间码 {client.RoomCode}，地址 {client.PublicHost}:{client.DataPort}"
+                          + (string.IsNullOrEmpty(password) ? "（公开）" : "（需密码）"));
+        }
+        catch (Exception ex)
+        {
+            AppendLog("[ERROR] 发布房间失败: " + ex.Message);
+        }
+    }
+
+    private void CloseRelayClient()
+    {
+        try { _relayClient?.Close(); } catch { }
+        _relayClient = null;
+    }
+
+    // 累计游戏时长（联机功能的防滥用门槛）
+    private void AccumulatePlayTime()
+    {
+        if (_gameStartedAt == default) return;
+        var elapsed = (long)(DateTime.UtcNow - _gameStartedAt).TotalSeconds;
+        _gameStartedAt = default;
+        if (elapsed <= 0) return;
+
+        // 单次最多计 24 小时，避免长时间挂机刷时长
+        App.Settings.Data.TotalPlaySeconds += Math.Min(elapsed, 24 * 3600);
+        App.Settings.Save();
+        AppendLog($"[INFO] 本次游戏时长 {PlayTimeGate.Format(elapsed)}，累计 {PlayTimeGate.DescribeTotal(App.Settings.Data)}");
+    }
+
     private void StartGameExitMonitor()
     {
         _logTimer?.Stop();
@@ -479,6 +625,9 @@ public partial class HomePage : Page
 
             _logTimer.Stop();
             var exitCode = _gameProcess.ExitCode;
+            AccumulatePlayTime();
+            StopLanWatcher();
+            CloseRelayClient();
             StopBtn.Visibility = Visibility.Collapsed;
             LaunchBtn.IsEnabled = true;
             LaunchBtn.Visibility = Visibility.Visible;

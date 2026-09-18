@@ -23,34 +23,69 @@ public class MinecraftService
         _settings = settings;
     }
 
+    // 官方清单拿不到时用镜像（PCL2 同款），保证新版本能及时出现
+    private const string ManifestMirrorUrl = "https://bmclapi2.bangbang93.com/mc/game/version_manifest_v2.json";
+    private static readonly TimeSpan ManifestMaxAge = TimeSpan.FromHours(3);
+
     public JsonElement Manifest(bool refresh = false)
     {
         var target = Path.Combine(_paths.MetadataDir, "version_manifest_v2.json");
-        if (!refresh && File.Exists(target))
+        if (!refresh && IsManifestFresh(target))
         {
             var raw = File.ReadAllText(target);
             return JsonSerializer.Deserialize<JsonElement>(raw);
         }
+
         Directory.CreateDirectory(_paths.MetadataDir);
-        var data = DownloadService.FetchJsonAsync(ManifestUrl).GetAwaiter().GetResult();
-        File.WriteAllText(target, data.GetRawText());
-        return data;
+        try
+        {
+            var data = DownloadService.FetchJsonAsync(ManifestUrl).GetAwaiter().GetResult();
+            File.WriteAllText(target, data.GetRawText());
+            return data;
+        }
+        catch when (File.Exists(target))
+        {
+            // 联网失败时退回本地缓存
+            return JsonSerializer.Deserialize<JsonElement>(File.ReadAllText(target));
+        }
     }
 
     public async Task<JsonElement> ManifestAsync(bool refresh = false)
     {
         var target = Path.Combine(_paths.MetadataDir, "version_manifest_v2.json");
-        if (!refresh && File.Exists(target))
+        if (!refresh && IsManifestFresh(target))
         {
             var raw = await File.ReadAllTextAsync(target);
             return JsonSerializer.Deserialize<JsonElement>(raw);
         }
 
-        var data = await DownloadService.FetchJsonAsync(ManifestUrl);
         Directory.CreateDirectory(_paths.MetadataDir);
-        await File.WriteAllTextAsync(target, data.GetRawText());
-        return data;
+        try
+        {
+            var data = await DownloadService.FetchJsonAsync(ManifestUrl);
+            await File.WriteAllTextAsync(target, data.GetRawText());
+            return data;
+        }
+        catch
+        {
+            // 官方源失败 → 试 BMCLAPI 镜像
+            try
+            {
+                var mirror = await DownloadService.FetchJsonAsync(ManifestMirrorUrl);
+                await File.WriteAllTextAsync(target, mirror.GetRawText());
+                return mirror;
+            }
+            catch when (File.Exists(target))
+            {
+                var raw = await File.ReadAllTextAsync(target);
+                return JsonSerializer.Deserialize<JsonElement>(raw);
+            }
+        }
     }
+
+    // 缓存超过 ManifestMaxAge 即视为过期，自动重新拉取（否则新版本不会出现）
+    private static bool IsManifestFresh(string path)
+        => File.Exists(path) && DateTime.UtcNow - File.GetLastWriteTimeUtc(path) < ManifestMaxAge;
 
     public List<Dictionary<string, object>> AvailableVersions(bool includeSnapshots = false)
     {
@@ -233,7 +268,8 @@ public class MinecraftService
 
     public (string java, List<string> args, string cwd) BuildCommand(
         Instance instance,
-        string? selectedJavaPath = null)
+        string? selectedJavaPath = null,
+        string? quickPlayServer = null)
     {
         var meta = ResolveVersion(instance.VersionId);
         var fallbackVersion = string.IsNullOrWhiteSpace(instance.McVersion)
@@ -265,8 +301,25 @@ public class MinecraftService
         var authMode = _settings.Data.AuthMode;
         var external = authMode == AuthModes.External;
         var authenticated = external || authMode == AuthModes.Microsoft;
+
+        // 开房时如勾选「允许非正版玩家进入」，改用离线会话启动，
+        // 这样「对局域网开放」时集成的服务端 online-mode=false。
+        // 但「一键加入别人的房间」必须使用真实会话，否则会报无效会话。
+        var quickPlayJoin = !string.IsNullOrWhiteSpace(quickPlayServer);
+        var offlineForLan = _settings.Data.LanAllowNonPremium && authenticated && !quickPlayJoin;
+
         string playerName, authUuid, accessToken, userType;
-        if (authenticated)
+        if (offlineForLan)
+        {
+            playerName = string.IsNullOrWhiteSpace(_settings.Data.AuthPlayerName)
+                ? _settings.Data.PlayerName
+                : _settings.Data.AuthPlayerName;
+            authUuid = AuthService.GenerateOfflineUuid(playerName);
+            accessToken = "0";
+            userType = "legacy";
+            external = false;
+        }
+        else if (authenticated)
         {
             playerName = _settings.Data.AuthPlayerName;
             authUuid = _settings.Data.AuthUuid;
@@ -346,16 +399,23 @@ public class MinecraftService
             ["${resolution_width}"] = "854",
             ["${resolution_height}"] = "480",
             ["${clientid}"] = MicrosoftAuthService.ClientId,
-            ["${auth_xuid}"] = "0"
+            ["${auth_xuid}"] = "0",
+            ["${quickPlayPath}"] = "",
+            ["${quickPlaySingleplayer}"] = "",
+            ["${quickPlayMultiplayer}"] = quickPlayServer ?? "",
+            ["${quickPlayRealms}"] = ""
         };
 
+        // 联机「一键启动并加入」：MC 1.20+ 支持 --quickPlayMultiplayer 直接进服务器
+        var quickPlay = !string.IsNullOrWhiteSpace(quickPlayServer);
         var features = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase)
         {
             ["is_demo_user"] = false,
             ["has_custom_resolution"] = false,
-            ["has_quick_plays_support"] = false,
+            ["has_quick_plays_support"] = quickPlay,
             ["is_quick_play_singleplayer"] = false,
-            ["is_quick_play_multiplayer"] = false,
+            // 一键加入：必须置 true，否则 --quickPlayMultiplayer 不会被加入启动参数
+            ["is_quick_play_multiplayer"] = quickPlay,
             ["is_quick_play_realms"] = false
         };
 

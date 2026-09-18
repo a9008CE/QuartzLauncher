@@ -412,12 +412,22 @@ public partial class MainWindow : Window
 
     private void NavHome_Click(object sender, RoutedEventArgs e) => NavigateTo(HomePage);
     public void NavigateToHome() => NavigateTo(HomePage);
+
+    /// <summary>联机大厅「一键启动并加入」：回首页并启动游戏。</summary>
+    public void StartQuickPlay()
+    {
+        NavigateToHome();
+        Dispatcher.BeginInvoke(new Action(() => HomePage.StartQuickPlayLaunch()));
+    }
     private void NavVersions_Click(object sender, RoutedEventArgs e) => NavigateTo(GetVersionsPage());
     public void NavigateToLocalVersions() => NavigateTo(_localVersionsPage ??= new LocalVersionsPage());
     private void NavServers_Click(object sender, RoutedEventArgs e) => NavigateTo(_serverBrowserPage ??= new ServerBrowserPage());
     public void NavigateToServerBrowser() => NavigateTo(_serverBrowserPage ??= new ServerBrowserPage());
     public void NavigateToBrowser(string url, Page? backTarget = null) => NavigateTo(new BrowserPage(url, backTarget));
     public void NavigateToJavaDownload() => NavigateTo(new ModBrowserPage(initialMode: "java"));
+    private MultiplayerPage? _multiplayerPage;
+    private void NavMultiplayer_Click(object sender, RoutedEventArgs e) => NavigateTo(_multiplayerPage ??= new MultiplayerPage());
+    public void NavigateToMultiplayer() => NavigateTo(_multiplayerPage ??= new MultiplayerPage());
     private void NavModBrowser_Click(object sender, RoutedEventArgs e)
     {
         var instance = HomePage.SelectedInstance;
@@ -662,11 +672,12 @@ public partial class MainWindow : Window
                   or InstanceDetailPage or ModsPage or SavesPage or ResourcePacksPage
                  or ShaderPacksPage or PresetPage) idx = 1;
         else if (page is ServerBrowserPage) idx = 2;
-        else if (page is ModBrowserPage or ModDownloadSettingsPage) idx = 3;
-        else if (page is SettingsPage) idx = 4;
-        else if (page is HelpPage) idx = 5;
+        else if (page is MultiplayerPage) idx = 3;
+        else if (page is ModBrowserPage or ModDownloadSettingsPage) idx = 4;
+        else if (page is SettingsPage) idx = 5;
+        else if (page is HelpPage) idx = 6;
         else if (page is MorePage or ThemeDetailPage or AnimationSettingsPage
-                  or SkinPreviewPage or SkinLibraryPage or WebsiteSitesPage) idx = 6;
+                  or SkinPreviewPage or SkinLibraryPage or WebsiteSitesPage) idx = 7;
         else return;
 
         for (var i = 0; i < NavStack.Children.Count; i++)

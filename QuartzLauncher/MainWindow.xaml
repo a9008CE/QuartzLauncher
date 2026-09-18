@@ -143,6 +143,15 @@
                                 </StackPanel>
                             </RadioButton>
                             <RadioButton Style="{DynamicResource NavBtn}"
+                                         Click="NavMultiplayer_Click">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="{DynamicResource NavTextAlignment}">
+                                    <TextBlock Text="&#xE716;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                               Width="22" TextAlignment="Center" VerticalAlignment="Center"
+                                               Margin="0,0,10,0"/>
+                                    <TextBlock Text="联机大厅" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </RadioButton>
+                            <RadioButton Style="{DynamicResource NavBtn}"
                                          Click="NavModBrowser_Click">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="{DynamicResource NavTextAlignment}">
                                     <TextBlock Text="&#xE896;" FontFamily="Segoe MDL2 Assets" FontSize="15"
